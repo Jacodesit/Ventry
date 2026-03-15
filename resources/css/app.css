@@ -152,3 +152,8 @@
     font-family: 'CabinetGrotesk';
     src: url('/fonts/CabinetGrotesk-regular.otf') format('opentype');
 }
+
+.landing-page {
+    background-image: url('/images/bbblurry (2).svg');
+    background-size: cover;
+}
