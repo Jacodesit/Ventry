@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Emotion;
+use App\Models\Post;
+use App\Models\Reaction;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,9 +16,13 @@ class EmotionController extends Controller
     public function index()
     {
         $emotions = Emotion::all();
+        $reactions = Reaction::all();
+        $posts = Post::with('emotion')->latest()->get();
 
         return inertia::render('homepage/page', [
-            'emotions' => $emotions
+            'emotions' => $emotions,
+            'reactions' => $reactions,
+            'posts' => $posts
         ]);
     }
 

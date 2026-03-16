@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
+use App\Models\Reaction;
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class ReactionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -28,24 +27,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nickname'       => 'nullable|string|max:50',
-            'emotion_id'     => 'required|integer|exists:emotions,id',
-            'message'        => 'required|string|max:500',
-            'custom_emotion' => 'nullable|string|max:30',
-        ]);
-
-        $validated['ip_address'] = $request->ip();
-
-        $post = Post::create($validated);
-
-        return redirect('/wall');
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(string $id)
     {
         //
     }
@@ -53,7 +41,7 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post)
+    public function edit(string $id)
     {
         //
     }
@@ -61,7 +49,7 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -69,7 +57,7 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy(string $id)
     {
         //
     }

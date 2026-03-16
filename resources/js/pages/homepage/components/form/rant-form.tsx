@@ -11,8 +11,8 @@ import {
     // FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import type { Emotion } from "@/types/post"
 import { Textarea } from "@/components/ui/textarea"
+import type { Emotion } from "@/types/post"
 
 type pageProps = {
     onClose: () => void
@@ -20,15 +20,20 @@ type pageProps = {
 }
 
 export default function RantForm({onClose, emotions}:pageProps) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm<{
+        nickname: string
+        emotion_id: number | ''
+        message: string
+    }>({
         nickname: '',
-        emoji_id: '',
+        emotion_id: '',
         message: ''
     })
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault()
         post('/posts', {
+            forceFormData: true,
             onSuccess: () => {
                 reset()
                 onClose();
@@ -58,18 +63,19 @@ export default function RantForm({onClose, emotions}:pageProps) {
                         <div className="flex flex-wrap gap-2">
                             {emotions.map(emotion => (
                                 <button
-                                    value={data.emoji_id}
-                                    onChange={(e) => setData('emoji_id', e.target.value)}
+                                    value={data.emotion_id}
+                                    onClick={() => setData('emotion_id', emotion.id)}
                                     key={emotion.id}
                                     type="button"
-                                    className="flex border px-3 py-1 rounded-md gap-2 cursor-pointer transition-all duration-300 hover:bg-accent-foreground hover:text-muted"
+                                    className={`flex border px-3 py-1 rounded-md gap-2 cursor-pointer transition-all duration-300
+                                        ${data.emotion_id === emotion.id ? 'bg-blue-500 text-white' : 'hover:bg-accent-foreground hover:text-muted'}`}
                                 >
                                     {emotion.emoji}
                                     {emotion.name}
                                 </button>
                             ))}
                         </div>
-                        {errors.emoji_id && <p className="errors text-xs text-destructive">{errors.emoji_id}</p>}
+                        {errors.emotion_id && <p className="errors text-xs text-destructive">{errors.emotion_id}</p>}
                     </Field>
 
                     <Field>

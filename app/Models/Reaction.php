@@ -4,15 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Emotion extends Model
+class Reaction extends Model
 {
     protected $fillable = [
         'name',
-        'emoji',
+        'emoji'
     ];
 
-    public function posts()
-    {
-        return $this->hasMany(Post::class);
+    public function posts() {
+        return $this->belongsTo(Post::class);
     }
 }

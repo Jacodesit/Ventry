@@ -13,6 +13,10 @@ class Post extends Model
         'custom_emotion',
         'ip_address',
         'expires_at',
-        'expires_at',
     ];
+
+    public function emotion()
+    {
+        return $this->belongsTo(Emotion::class);
+    }
 }
