@@ -20,14 +20,17 @@ type pageProps = {
 }
 
 export default function RantForm({onClose, emotions}:pageProps) {
+
     const { data, setData, post, processing, errors, reset } = useForm<{
         nickname: string
         emotion_id: number | ''
         message: string
+        custom_emotion: string
     }>({
         nickname: '',
         emotion_id: '',
-        message: ''
+        message: '',
+        custom_emotion: '',
     })
 
     const submit = (e: React.FormEvent) => {
@@ -45,7 +48,7 @@ export default function RantForm({onClose, emotions}:pageProps) {
     return (
         <div className="w-full max-w-2xl">
             <form onSubmit={submit}>
-                <FieldGroup>
+                <FieldGroup className="">
                     <Field>
                         <FieldLabel htmlFor="nickname">Nickname <span className="text-blue-500">(Optional)</span></FieldLabel>
                         <Input
@@ -79,6 +82,17 @@ export default function RantForm({onClose, emotions}:pageProps) {
                     </Field>
 
                     <Field>
+                        <FieldLabel htmlFor="custom-emotion">Describe your feeling</FieldLabel>
+                        <Input
+                            value={data.custom_emotion}
+                            onChange={(e) => setData('custom_emotion', e.target.value)}
+                            id="custom-emotion"
+                            placeholder="Put your feeling into words (e.g. stressed, calm)"
+                        />
+                    </Field>
+
+
+                    <Field>
                         <FieldLabel htmlFor="message">Message</FieldLabel>
                         <Textarea
                             value={data.message}
@@ -90,20 +104,21 @@ export default function RantForm({onClose, emotions}:pageProps) {
                         />
                         {errors.message && <p className="errors text-xs text-destructive">{errors.message}</p>}
                     </Field>
-
-
-                    <Field className="flex justify-end" orientation="horizontal">
-                        <Button
-                            disabled={processing}
-                            type="submit"
-                        >
-                            {processing ? 'Posting...' : 'Post'}
-                        </Button>
-                        <Button variant="outline" type="button" onClick={onClose}>
-                            Cancel
-                        </Button>
-                    </Field>
                 </FieldGroup>
+                {/* <ScrollBar orientation="vertical" /> */}
+
+
+                <Field className="flex justify-end border-t pt-2 mt-4" orientation="horizontal">
+                    <Button
+                        disabled={processing}
+                        type="submit"
+                    >
+                        {processing ? 'Posting...' : 'Post'}
+                    </Button>
+                    <Button variant="outline" type="button" onClick={onClose}>
+                        Cancel
+                    </Button>
+                </Field>
             </form>
         </div>
     )

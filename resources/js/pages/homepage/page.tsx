@@ -22,7 +22,7 @@ export default function Home({name, emotions, posts, reactions}:pageProps) {
             <div className='flex flex-col gap-5'>
                 <section className="flex justify-center items-center h-80 flex-col gap-5">
                     <div className="text-center">
-                        <h1 className="font-bold text-7xl">
+                        <h1 className="font-bold text-3xl md:text-5xl lg:text-7xl">
                             <Typewriter
                                 words={[
                                     "What’s On Your Mind?",
@@ -52,7 +52,7 @@ export default function Home({name, emotions, posts, reactions}:pageProps) {
                                 delaySpeed={1500}
                             />
                         </h1>
-                        <p className="font-extralight text-gray-500">Write what you want. Read what others feel. One place. One shared voice.</p>
+                        <p className="text-sm md:text-base font-extralight text-gray-500">Write what you want. Read what others feel. One place. One shared voice.</p>
                     </div>
                     <div className='flex gap-2'>
                         <RantBtn onClick={() => setRantOpen(true)} />

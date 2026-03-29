@@ -1,4 +1,7 @@
+import { useState } from "react"
 import type { Post, Reaction } from "@/types/post"
+import PostHeader from "../modal/header/post-header"
+import WelcomeModal from "../modal/welcome-modal"
 
 type pageProps = {
     posts: Post[]
@@ -6,36 +9,30 @@ type pageProps = {
 }
 
 export default function Posts({posts, reactions}:pageProps) {
+    const [showWelcome, setShowWelcome] = useState(true);
+
     return (
-        <section className="grid grid-cols-3 gap-6 pb-5">
+        <section className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6 pb-5">
             {posts.map(post => (
                 <div
                     key={post.id}
-                    className="border rounded-md"
+
+                    className="break-inside-avoid mb-6 border rounded-md transition-all duration-300 transform hover:-translate-y-2 bg-white"
                 >
-                    <div className="px-3 py-2 border-b flex justify-between items-center bg-blue-500 rounded-t-md text-muted">
-                        <div>
-                            <h4 className="m-0 text-xl">{post?.nickname || 'Anonymous'}</h4>
-                            <p className="text-xs">
-                                {new Date(post.created_at).toLocaleTimeString([], {
-                                    hour: "2-digit",
-                                    minute: "2-digit"
-                                })}
-                            </p>
-                        </div>
-                        <p className="text-xs">{post.emotion.name}</p>
+                    <PostHeader post={post} />
+
+                    {/* Message Section */}
+                    <div className="px-5 py-5 border-b">
+                        <p className="text-xs text-gray-500 mb-1">Message:</p>
+                        <p className="whitespace-pre-wrap italic">{post.message}</p>
                     </div>
 
-                    <div className="px-3 py-5 border-b">
-                        <p className="text-xs text-gray-500 py-1">Message:</p>
-                        <p className="text-sm h-35">{post.message}</p>
-                    </div>
-
-                    <div className="px-3 py-2 flex gap-1.5">
+                    {/* Reactions Section */}
+                    <div className="px-5 py-2 flex gap-1.5">
                         {reactions.map(reaction => (
                             <div
                                 key={reaction.id}
-                                className="transition-all duration-300 hover:scale-200 cursor-pointer"
+                                className="transition-all duration-300 hover:scale-150 cursor-pointer flex items-center"
                             >
                                 {reaction.emoji}
                             </div>
@@ -43,6 +40,13 @@ export default function Posts({posts, reactions}:pageProps) {
                     </div>
                 </div>
             ))}
+
+            {showWelcome && (
+                <WelcomeModal
+                    showWelcome={showWelcome}
+                    onClose={() => setShowWelcome(false)}
+                />
+            )}
         </section>
     )
 }

@@ -7,8 +7,13 @@ type pageProps = {
 export default function Header({name}:pageProps) {
     const currentPath = window.location.pathname;
 
+    const links = [
+        {name: 'Wall'},
+        {name: 'About'}
+    ]
+
     return (
-        <header className="w-full fixed px-5 md:px-15 lg:px-50 py-5 grid grid-cols-3 items-center shadow"
+        <header className="w-full fixed px-5 md:px-15 lg:px-50 py-5 grid grid-cols-3 items-center shadow z-900"
         >
             <p className="header text-2xl font-bold">{name}</p>
 
@@ -16,8 +21,17 @@ export default function Header({name}:pageProps) {
                 <>
                     <nav className="flex justify-center items-center">
                         <ul className="flex items-center gap-5">
-                            <li>Wall</li>
-                            <li>About</li>
+                            {links.map(link => (
+                                <li
+                                    key={link.name}
+                                    className={`${currentPath === '/' + link.name.toLowerCase()
+                                        ? 'text-blue-500 font-extrabold border-b-2 border-blue-500'
+                                        : ''
+                                    }`}
+                                >
+                                    {link.name}
+                                </li>
+                            ))}
                         </ul>
                     </nav>
 
