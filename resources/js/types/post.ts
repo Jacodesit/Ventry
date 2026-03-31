@@ -7,6 +7,7 @@ export type Emotion = {
 
 export type Post = {
     id: number,
+    type: 'rant' | 'secret',
     nickname: string,
     emotion_id: string,
     message: string,

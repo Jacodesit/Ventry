@@ -30,9 +30,9 @@ class PostController extends Controller
     {
         $validated = $request->validate([
             'nickname'       => 'nullable|string|max:50',
-            'emotion_id'     => 'required|integer|exists:emotions,id',
+            'emotion_id'     => 'nullable|integer|exists:emotions,id|required_without:custom_emotion',
             'message'        => 'required|string|max:500',
-            'custom_emotion' => 'nullable|string|max:30',
+            'custom_emotion' => 'nullable|string|max:30|required_without:emotion_id',
         ]);
 
         $validated['ip_address'] = $request->ip();

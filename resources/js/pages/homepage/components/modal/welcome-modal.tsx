@@ -1,4 +1,5 @@
-import { TriangleAlert } from 'lucide-react';
+import { TriangleAlert, Info } from 'lucide-react';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -17,11 +18,18 @@ type pageProps = {
 }
 
 export default function WelcomeModal({onClose, showWelcome}:pageProps) {
+    const [ isRespected, setIsRespected ] = useState(false);
+
     const reminders = [
         { reminder: 'Be respectful. No hate or harassment.' },
         { reminder: 'Keep it anonymous. Don’t share personal details.' },
         { reminder: 'No offensive or harmful words.' },
         { reminder: 'What you post may affect others. Think first.' }
+    ]
+
+    const rules = [
+        { rules: '20-second cooldown between posts' },
+        { rules: 'Posts reset every 24 hours' },
     ]
 
     return (
@@ -55,17 +63,42 @@ export default function WelcomeModal({onClose, showWelcome}:pageProps) {
                         ))}
                     </ul>
                 </div>
-                <p className="font-medium">This is a safe space. Keep it that way.</p>
 
-                 <DialogFooter className='border-t pt-2 mt-4 flex justify-between items-center w-full gap-99'>
+                <div className='flex items-center gap-1'>
+                    <Info size={12} />
+                    <h1
+                        className="font-medium"
+                    >
+                        Posting rules
+                    </h1>
+                </div>
+
+                <div className='px-4'>
+                    <ul className='list-disc'>
+                        {rules.map((rule, index) => (
+                            <li
+                                key={index}
+                                className='text-gray-500'
+                            >
+                                {rule.rules}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <p className="font-medium bg-green-100 p-3 text-green-900 border-green-500 border border-l-4 border-l-green-500 rounded-md">This is a safe space. Keep it that way.</p>
+
+                <DialogFooter className='border-t pt-2 mt-4 flex justify-between items-center w-full gap-99'>
                     <div className='flex items-center gap-1 justify-start'>
                         <input
                             type="checkbox"
+                            onChange={(e) => setIsRespected(e.target.checked)}
+
                         />
                         <p>I will be respectful</p>
                     </div>
 
                     <Button
+                        disabled={!isRespected}
                         onClick={onClose}
                     >
                         Proceed

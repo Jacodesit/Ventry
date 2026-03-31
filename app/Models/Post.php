@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     protected $fillable  = [
+        'type',
         'emotion_id',
         'nickname',
         'message',

@@ -9,7 +9,7 @@ export default function PostHeader({post}:pageProps) {
         <header>
             <div className="w-full relative px-5 py-3 border-b rounded-t-md">
                 <div
-                    className="absolute inset-0 z-0 rounded-t-md"
+                    className="absolute inset-0 z-10 rounded-t-md"
                     style={{
                     backgroundImage: `
                         linear-gradient(to right, #e7e5e4 1px, transparent 1px),
@@ -55,8 +55,8 @@ export default function PostHeader({post}:pageProps) {
                     WebkitMaskComposite: "source-in",
                     }}
                 />
-                <div className="flex justify-between items-center">
-                    <div>
+                <div className="flex justify-between items-center ">
+                    <div className="z-50">
                         <h4 className="m-0 text-lg font-semibold">{post?.nickname || 'Anonymous'}</h4>
                         <p className="text-xs opacity-80">
                             {new Date(post.created_at).toLocaleTimeString([], {
@@ -64,10 +64,13 @@ export default function PostHeader({post}:pageProps) {
                                 minute: "2-digit"
                             })}
                         </p>
+
                     </div>
                     <div className="flex items-center gap-1 px-3 py-1 rounded-md bg-gray-100">
-                        <p>{post.emotion.emoji}</p>
-                        <p className="text-xs">{post.emotion.name}</p>
+                        {post.custom_emotion
+                            ? `📝 ${post.custom_emotion}`
+                            : `${post.emotion?.emoji || '🙂'} ${post.emotion?.name || ''}`
+                        }
                     </div>
                 </div>
             </div>

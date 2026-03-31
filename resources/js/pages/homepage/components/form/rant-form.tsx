@@ -26,23 +26,23 @@ export default function RantForm({onClose, emotions}:pageProps) {
         emotion_id: number | ''
         message: string
         custom_emotion: string
+        type: string
     }>({
         nickname: '',
         emotion_id: '',
         message: '',
         custom_emotion: '',
+        type: 'rant'
     })
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault()
         post('/posts', {
-            forceFormData: true,
             onSuccess: () => {
                 reset()
                 onClose();
             }
         })
-
     }
 
     return (
@@ -81,14 +81,19 @@ export default function RantForm({onClose, emotions}:pageProps) {
                         {errors.emotion_id && <p className="errors text-xs text-destructive">{errors.emotion_id}</p>}
                     </Field>
 
-                    <Field>
-                        <FieldLabel htmlFor="custom-emotion">Describe your feeling</FieldLabel>
-                        <Input
-                            value={data.custom_emotion}
-                            onChange={(e) => setData('custom_emotion', e.target.value)}
-                            id="custom-emotion"
-                            placeholder="Put your feeling into words (e.g. stressed, calm)"
-                        />
+                    <Field className="grid grid-cols-2">
+                        <div>
+                            <FieldLabel htmlFor="custom-emotion">Describe your feeling</FieldLabel>
+                            <Input
+                                value={data.custom_emotion}
+                                onChange={(e) => setData('custom_emotion', e.target.value)}
+                                id="custom-emotion"
+                                placeholder="Put your feeling into words (e.g. stressed, calm)"
+                            />
+                        </div>
+                        <div>
+                            <FieldLabel htmlFor="custom-emotion">Type</FieldLabel>
+                        </div>
                     </Field>
 
 

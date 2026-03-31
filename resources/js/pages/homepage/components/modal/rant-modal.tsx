@@ -19,7 +19,7 @@ type pageProps = {
 
 export default function RantModal({openRant, onClose, emotions}:pageProps) {
     return (
-        <Dialog open={openRant} onOpenChange={onClose} >
+        <Dialog open={openRant} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-2xl w-full z-1000">
                 <DialogHeader className="border-b pb-2 text-left">
                     <DialogTitle className="text-3xl font-bold">Let it all out</DialogTitle>
