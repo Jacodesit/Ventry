@@ -5,6 +5,7 @@ import type { Emotion, Post, Reaction } from '@/types/post'
 import ConfessBtn from "./components/buttons/confess-btn"
 import RantBtn from "./components/buttons/rant-btn"
 import Posts from './components/data.tsx/posts'
+import ConfessModal from './components/modal/confess-modal'
 import RantModal from './components/modal/rant-modal'
 
 type pageProps = {
@@ -15,7 +16,8 @@ type pageProps = {
 }
 
 export default function Home({name, emotions, posts, reactions}:pageProps) {
-    const [openRant, setRantOpen] = useState(false);
+    const [openModal, setModalOpen] = useState(false);
+    const [type, setType] = useState<'rant' | 'secret'>('rant');
 
     return (
         <AppLayout name={name}>
@@ -55,22 +57,39 @@ export default function Home({name, emotions, posts, reactions}:pageProps) {
                         <p className="text-sm md:text-base font-extralight text-gray-500">Write what you want. Read what others feel. One place. One shared voice.</p>
                     </div>
                     <div className='flex gap-2'>
-                        <RantBtn onClick={() => setRantOpen(true)} />
-                        <ConfessBtn />
+                        <RantBtn onClick={() => {
+                            setType('rant')
+                            setModalOpen(true)
+                        }} />
+
+                        <ConfessBtn onClick={() => {
+                            setType('secret')
+                            setModalOpen(true)
+                        }} />
 
                     </div>
                 </section>
                 <Posts
                     posts={posts}
                     reactions={reactions}
+                    type={type}
                 />
             </div>
 
             <RantModal
+                type={type}
                 emotions={emotions}
-                openRant={openRant}
-                onClose={() => setRantOpen(false)}
+                openModal={openModal && type ===  'rant'}
+                onClose={() => setModalOpen(false)}
             />
+
+            <ConfessModal
+                type={type}
+                emotions={emotions}
+                openModal={openModal && type ===  'secret'}
+                onClose={() => setModalOpen(false)}
+            />
+
         </AppLayout>
     )
 }

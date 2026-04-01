@@ -8,6 +8,7 @@ class Post extends Model
 {
     protected $fillable  = [
         'type',
+        'to_whom',
         'emotion_id',
         'nickname',
         'message',

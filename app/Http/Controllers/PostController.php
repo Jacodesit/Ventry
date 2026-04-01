@@ -28,16 +28,25 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nickname'       => 'nullable|string|max:50',
-            'emotion_id'     => 'nullable|integer|exists:emotions,id|required_without:custom_emotion',
-            'message'        => 'required|string|max:500',
-            'custom_emotion' => 'nullable|string|max:30|required_without:emotion_id',
-        ]);
+        $type = $request->input('type');
+
+        $rules = [
+            'nickname' => 'nullable|string|max:50',
+            'message'  => 'required|string|max:1000',
+            'to_whom'  => 'nullable|string|max:50',
+        ];
+
+        if ($type === 'rant') {
+            $rules['emotion_id'] = 'nullable|integer|exists:emotions,id|required_without:custom_emotion';
+            $rules['custom_emotion'] = 'nullable|string|max:30|required_without:emotion_id';
+        }
+
+        $validated = $request->validate($rules);
 
         $validated['ip_address'] = $request->ip();
+        $validated['type'] = $type;
 
-        $post = Post::create($validated);
+        Post::create($validated);
 
         return redirect('/wall');
     }

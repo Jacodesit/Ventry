@@ -10,4 +10,5 @@ Route::get('/', fn() => Inertia::render('welcome'))->name('index');
 Route::get('/wall', [EmotionController::class, 'index'])->name('wall');
 Route::resource('posts', PostController::class)->except('index');
 
+// Saving a secret post
 require __DIR__.'/settings.php';

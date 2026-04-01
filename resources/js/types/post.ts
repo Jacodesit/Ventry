@@ -8,6 +8,7 @@ export type Emotion = {
 export type Post = {
     id: number,
     type: 'rant' | 'secret',
+    to_whom: string,
     nickname: string,
     emotion_id: string,
     message: string,

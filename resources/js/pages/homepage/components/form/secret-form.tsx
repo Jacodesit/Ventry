@@ -8,26 +8,22 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import type { Emotion } from "@/types/post"
 
 type pageProps = {
     onClose: () => void
-    emotions: Emotion[]
     type: 'rant' | 'secret'
 }
 
-export default function RantForm({onClose, emotions,type}:pageProps) {
+export default function SecretForm({onClose,type}:pageProps) {
     const { data, setData, post, processing, errors, reset } = useForm<{
         nickname: string
-        emotion_id: number | ''
+        to_whom: string
         message: string
-        custom_emotion: string
         type: string
     }>({
         nickname: '',
-        emotion_id: '',
+        to_whom: '',
         message: '',
-        custom_emotion: '',
         type: type,
     })
 
@@ -44,9 +40,6 @@ export default function RantForm({onClose, emotions,type}:pageProps) {
             }
         })
     }
-
-    const hasEmotion = data.emotion_id !== ''
-    const hasCustom = data.custom_emotion.trim() !== ''
 
     return (
         <div className="w-full max-w-2xl">
@@ -65,44 +58,15 @@ export default function RantForm({onClose, emotions,type}:pageProps) {
                     </Field>
 
                     <Field>
-                        <FieldLabel htmlFor="emotion">Emotion</FieldLabel>
-                        <div className="flex flex-wrap gap-2">
-                            {emotions.map(emotion => (
-                                <button
-                                    value={data.emotion_id}
-                                    onClick={() => {
-                                        setData('emotion_id', emotion.id)
-                                        setData('custom_emotion', '')
-                                    }}
-                                    disabled={hasCustom}
-                                    key={emotion.id}
-                                    type="button"
-                                    className={`flex border px-3 py-1 rounded-md gap-2 cursor-pointer transition-all duration-300
-                                        ${data.emotion_id === emotion.id ? 'bg-blue-500 text-white' : 'hover:bg-accent-foreground hover:text-muted'}`}
-                                >
-                                    {emotion.emoji}
-                                    {emotion.name}
-                                </button>
-                            ))}
-                        </div>
-                        {errors.emotion_id && <p className="errors text-xs text-destructive">{errors.emotion_id}</p>}
-                    </Field>
-
-                    <Field>
-                        <FieldLabel htmlFor="custom-emotion">Describe your feeling</FieldLabel>
+                        <FieldLabel htmlFor="receipient">To whom <span className="text-blue-500">(Optional)</span></FieldLabel>
                         <Input
-                            value={data.custom_emotion}
-                            onChange={(e) => {
-                                setData('custom_emotion', e.target.value)
-
-                                if (e.target.value) {
-                                    setData('emotion_id', '')
-                                }
-                            }}
-                            disabled={hasEmotion}
-                            id="custom-emotion"
-                            placeholder="Put your feeling into words (e.g. stressed, calm)"
+                            value={data.to_whom}
+                            onChange={(e) => setData('to_whom', e.target.value)}
+                            id="to_whom"
+                            autoComplete="on"
+                            placeholder="Name of the person this secret are dedicated to"
                         />
+                        {errors.nickname && <p className="errors text-xs text-destructive">{errors.nickname}</p>}
                     </Field>
 
                     <Field>
@@ -111,15 +75,13 @@ export default function RantForm({onClose, emotions,type}:pageProps) {
                             value={data.message}
                             onChange={(e) => setData('message', e.target.value)}
                             id="message"
-                            placeholder="What's on your mind?"
+                            placeholder="What's on your secret?"
                             rows={20}
                             className="resize-none"
                         />
                         {errors.message && <p className="errors text-xs text-destructive">{errors.message}</p>}
                     </Field>
                 </FieldGroup>
-                {/* <ScrollBar orientation="vertical" /> */}
-
 
                 <Field className="flex justify-end border-t pt-2 mt-4" orientation="horizontal">
                     <Button
