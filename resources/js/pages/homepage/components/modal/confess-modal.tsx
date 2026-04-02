@@ -20,7 +20,7 @@ export default function ConfessModal({openModal, onClose, type}:pageProps) {
         <Dialog open={openModal} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-2xl w-full z-1000">
                 <DialogHeader className="border-b pb-2 text-left">
-                    <DialogTitle className="text-3xl font-bold flex items-center gap-5">Share a secret or confession<span className="text-[0.3em] border-2 border-green-500 bg-green-50 text-green-700 px-3 py-1 rounded-md">{type.charAt(0).toUpperCase() + type.slice(1)}</span></DialogTitle>
+                    <DialogTitle className="text-3xl font-bold flex items-center gap-3">Share a secret or confession<span className="text-[0.3em] border-2 border-green-500 bg-green-50 text-green-700 px-3 py-1 rounded-md dark:bg-green-950/50 dark:border-none">{type.charAt(0).toUpperCase() + type.slice(1)}</span></DialogTitle>
                     <DialogDescription>
                         Share something you've never told anyone...
                     </DialogDescription>

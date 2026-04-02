@@ -113,7 +113,7 @@ export default function RantForm({onClose, emotions,type}:pageProps) {
                             id="message"
                             placeholder="What's on your mind?"
                             rows={20}
-                            className="resize-none"
+                            className="resize-none dark:bg-[#000000] dark:border-[#181818]"
                         />
                         {errors.message && <p className="errors text-xs text-destructive">{errors.message}</p>}
                     </Field>

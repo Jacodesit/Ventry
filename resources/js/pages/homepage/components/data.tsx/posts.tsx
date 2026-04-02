@@ -32,9 +32,9 @@ export default function Posts({posts, reactions, type}:pageProps) {
             {posts.map(post => (
                 <div
                     key={post.id}
-
-                    className={`break-inside-avoid mb-6 border rounded-md transition-all duration-300
-                        ${post.type === 'rant' ? 'bg-white' : 'bg-gray-50'}`}
+                    data-aos="fade-up"
+                    className={`break-inside-avoid mb-6 border rounded-md transition-all duration-300 z-50 dark:bg-[#0A0A0A]
+                        ${post.type === 'rant' ? 'bg-white '  : 'bg-gray-50'}`}
                 >
                     <PostHeader post={post} type={type}/>
 
@@ -56,19 +56,34 @@ export default function Posts({posts, reactions, type}:pageProps) {
                             className="inline-block relative"
                         >
                             {activePostId === post.id && (
-                                <div className='px-2 py-2 flex gap-1.5 border rounded-lg shadow bg-white absolute -top-17'>
+                                <div className='absolute -top-16 left-1/2 -translate-x-1/2 flex gap-2 p-1.5
+                                                bg-white backdrop-blur-md border border-slate-200/60
+                                                rounded-full shadow-xl shadow-black/5 animate-in fade-in
+                                                zoom-in-95 duration-200 dark:bg-[#000000] dark:border-none'>
                                     {reactions.map(reaction => (
                                         <div
                                             key={reaction.id}
-                                            className="transition-all duration-300 hover:scale-125 cursor-pointer fade-in flex-1 text-2xl"
+                                            className="group flex flex-col items-center justify-center
+                                                    w-10 h-10 rounded-full transition-all duration-200
+                                                    hover:bg-white hover:dark:bg-[#0a0a0a] hover:scale-125 hover:shadow-sm cursor-pointer"
                                         >
-                                            {reaction.emoji}
-                                            <p className='text-[0.3em] text-center'>{reaction.name}</p>
+                                            <span className="text-xl leading-none">{reaction.emoji}</span>
+
+                                            {/* Tooltip-style name that appears on hover */}
+                                            <span className='absolute -top-8 scale-0 group-hover:scale-100
+                                                    transition-transform bg-slate-800 text-white
+                                                    text-[10px] px-2 py-1 rounded-md pointer-events-none'>
+                                                {reaction.name}
+                                            </span>
                                         </div>
                                     ))}
                                 </div>
                             )}
-                            <Smile size={20} className='cursor-pointer' />
+
+                            <button className="p-2 rounded-full text-slate-500 hover:bg-slate-100
+                                            hover:text-slate-900 transition-colors">
+                                <Smile size={22} strokeWidth={1.5} />
+                            </button>
                         </div>
                     </div>
                 </div>

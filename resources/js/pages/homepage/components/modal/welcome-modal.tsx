@@ -56,7 +56,7 @@ export default function WelcomeModal({onClose, showWelcome}:pageProps) {
                         {reminders.map((reminder, index) => (
                             <li
                                 key={index}
-                                className='text-gray-500'
+                                className='dark:text-muted-foreground'
                             >
                                 {reminder.reminder}
                             </li>
@@ -78,20 +78,21 @@ export default function WelcomeModal({onClose, showWelcome}:pageProps) {
                         {rules.map((rule, index) => (
                             <li
                                 key={index}
-                                className='text-gray-500'
+                                className='dark:text-muted-foreground'
                             >
                                 {rule.rules}
                             </li>
                         ))}
                     </ul>
                 </div>
-                <p className="font-medium bg-green-100 p-3 text-green-900 border-green-500 border border-l-4 border-l-green-500 rounded-md">This is a safe space. Keep it that way.</p>
+                <p className="font-medium bg-green-100 p-3 text-green-900 border-green-500 border border-l-4 border-l-green-500 rounded-md dark:bg-green-950/30 dark:text-green-500">This is a safe space. Keep it that way.</p>
 
                 <DialogFooter className='border-t pt-2 mt-4 flex justify-between items-center w-full gap-99'>
                     <div className='flex items-center gap-1 justify-start'>
                         <input
                             type="checkbox"
                             onChange={(e) => setIsRespected(e.target.checked)}
+                            className="accent-black dark:accent-blue-400"
 
                         />
                         <p>I will be respectful</p>
