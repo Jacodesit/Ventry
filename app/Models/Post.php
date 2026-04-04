@@ -10,6 +10,7 @@ class Post extends Model
         'type',
         'to_whom',
         'emotion_id',
+        'music_url',
         'nickname',
         'message',
         'custom_emotion',

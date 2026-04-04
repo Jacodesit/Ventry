@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Typewriter } from 'react-simple-typewriter'
 import AppLayout from "@/layouts/app-layout"
 import type { Emotion, Post, Reaction } from '@/types/post'
@@ -18,6 +18,19 @@ type pageProps = {
 export default function Home({name, emotions, posts, reactions}:pageProps) {
     const [openModal, setModalOpen] = useState(false);
     const [type, setType] = useState<'rant' | 'secret'>('rant');
+    const [cooldown, setCooldown] = useState(0)
+
+    useEffect(() => {
+        if (cooldown <= 0) {
+            return
+        }
+
+        const timer = setInterval(() => {
+            setCooldown((prev) => prev - 1)
+        }, 1000)
+
+        return () => clearInterval(timer)
+    }, [cooldown])
 
     return (
         <AppLayout name={name}>
@@ -57,15 +70,21 @@ export default function Home({name, emotions, posts, reactions}:pageProps) {
                         <p className="text-sm md:text-base font-extralight text-gray-500">Write what you want. Read what others feel. One place. One shared voice.</p>
                     </div>
                     <div className='flex gap-2'>
-                        <RantBtn onClick={() => {
-                            setType('rant')
-                            setModalOpen(true)
-                        }} />
+                        <RantBtn
+                            cooldown={cooldown}
+                            onClick={() => {
+                                setType('rant')
+                                setModalOpen(true)
+                            }}
+                        />
 
-                        <ConfessBtn onClick={() => {
-                            setType('secret')
-                            setModalOpen(true)
-                        }} />
+                        <ConfessBtn
+                            cooldown={cooldown}
+                            onClick={() => {
+                                setType('secret')
+                                setModalOpen(true)
+                            }}
+                        />
 
                     </div>
                 </section>
@@ -81,6 +100,7 @@ export default function Home({name, emotions, posts, reactions}:pageProps) {
                 emotions={emotions}
                 openModal={openModal && type ===  'rant'}
                 onClose={() => setModalOpen(false)}
+                setCoolDown={setCooldown}
             />
 
             <ConfessModal
@@ -88,6 +108,7 @@ export default function Home({name, emotions, posts, reactions}:pageProps) {
                 emotions={emotions}
                 openModal={openModal && type ===  'secret'}
                 onClose={() => setModalOpen(false)}
+                setCoolDown={setCooldown}
             />
 
         </AppLayout>

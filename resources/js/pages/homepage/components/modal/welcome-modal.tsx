@@ -33,8 +33,27 @@ export default function WelcomeModal({onClose, showWelcome}:pageProps) {
     ]
 
     return (
-        <Dialog open={showWelcome} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-2xl w-full z-9999">
+        <Dialog
+            open={showWelcome}
+            onOpenChange={(open) => {
+                if(!open && isRespected) {
+                    onClose()
+                }
+            }}
+        >
+            <DialogContent
+                className="sm:max-w-2xl w-full z-9999 [&>button]:hidden"
+                onInteractOutside={(e) => {
+                    if (!isRespected) {
+                        e.preventDefault()
+                    }
+                }}
+                onEscapeKeyDown={(e) => {
+                    if (!isRespected) {
+                        e.preventDefault()
+                    }
+                }}
+            >
                 <DialogHeader className="border-b pb-2 text-left">
                     <DialogTitle className="text-3xl font-bold">Welcome to Ventry</DialogTitle>
                     <DialogDescription>
@@ -87,22 +106,25 @@ export default function WelcomeModal({onClose, showWelcome}:pageProps) {
                 </div>
                 <p className="font-medium bg-green-100 p-3 text-green-900 border-green-500 border border-l-4 border-l-green-500 rounded-md dark:bg-green-950/30 dark:text-green-500">This is a safe space. Keep it that way.</p>
 
-                <DialogFooter className='border-t pt-2 mt-4 flex justify-between items-center w-full gap-99'>
-                    <div className='flex items-center gap-1 justify-start'>
-                        <input
-                            type="checkbox"
-                            onChange={(e) => setIsRespected(e.target.checked)}
-                            className="accent-black dark:accent-blue-400"
+                <div className='flex gap-1'>
+                    <input
+                        type="checkbox"
+                        onChange={(e) => setIsRespected(e.target.checked)}
+                        className="accent-black dark:accent-blue-400"
 
-                        />
-                        <p>I will be respectful</p>
-                    </div>
+                    />
+                    <p>I understad and dont show again</p>
+                </div>
 
+                <DialogFooter className='border-t pt-2 flex justify-end w-full gap-99'>
                     <Button
                         disabled={!isRespected}
-                        onClick={onClose}
+                        onClick={() => {
+                            localStorage.setItem('ventry_welcome_seen', 'true')
+                            onClose()
+                        }}
                     >
-                        Proceed
+                        I understand
                     </Button>
                 </DialogFooter>
             </DialogContent>

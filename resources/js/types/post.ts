@@ -14,6 +14,7 @@ export type Post = {
     message: string,
     custom_emotion: string
     emotion: Emotion
+    music_url: string
     created_at: string
 }
 

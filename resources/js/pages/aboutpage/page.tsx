@@ -24,14 +24,14 @@ export default function About({name}:pageProps) {
     return (
         <AppLayout name={name}>
             <div className="grid grid-cols-4 grid-rows-6 gap-2 py-10 mt-10 mb-20">
-                <div data-aos="fade-up" data-aos-delay="0" className="col-span-2 row-span-3 border rounded-md p-7 dark:bg-[#0a0a0a]">
+                <div data-aos="fade-up" data-aos-delay="0" className="col-span-2 row-span-3 border rounded-md p-7 bg-gray-50 dark:bg-[#0a0a0a]">
                     <div className="flex items-center gap-1 mb-5">
                         <Info size={17} />
                         <h1 className="text-lg font-bold">What is Ventry?</h1>
                     </div>
                     <p className="text-sm dark:text-muted-foreground">Ventry is a place where you can speak your mind without fear. It’s a safe corner of the internet where you can share your thoughts, feelings, and secrets completely anonymously. No accounts. No usernames. No pressure. Just a space for honesty, for letting out what you’ve been holding inside. You don’t have to explain yourself, and you don’t have to worry about being judged.</p>
                 </div>
-                <div data-aos="fade-up" data-aos-delay="100" className="col-start-3 row-span-3 border rounded-md p-7 dark:bg-[#0a0a0a]">
+                <div data-aos="fade-up" data-aos-delay="100" className="col-start-3 row-span-3 border rounded-md p-7 bg-gray-50 dark:bg-[#0a0a0a]">
                     <div className="flex items-center gap-1 mb-5">
                         <Settings size={17} />
                         <h1 className="text-lg font-bold">How it works?</h1>
@@ -49,14 +49,14 @@ export default function About({name}:pageProps) {
                     </ul>
 
                 </div>
-                <div data-aos="fade-up" data-aos-delay="200" className="col-start-1 col-span-2 row-start-4 row-span-3 border rounded-md  p-7 dark:bg-[#0a0a0a]">
+                <div data-aos="fade-up" data-aos-delay="200" className="col-start-1 col-span-2 row-start-4 row-span-3 border rounded-md  p-7 bg-gray-50 dark:bg-[#0a0a0a]">
                     <div className="flex items-center gap-1 mb-5">
                         <Zap size={17} />
                         <h1 className="text-lg font-bold">Why it exists?</h1>
                     </div>
                     <p className="text-sm dark:text-muted-foreground">Everyone has moments when they feel alone, when they carry thoughts and emotions that weigh them down. Not everyone has someone they can trust to talk to. Ventry exists for those moments. It’s a place to release what’s been bottled up, to express the things you don’t say out loud, and to feel lighter knowing that someone, even if invisible, has heard you.</p>
                 </div>
-                <div data-aos="fade-up" data-aos-delay="300" className="col-start-4 row-start-1 row-span-3 border rounded-md p-7 dark:bg-[#0a0a0a]">
+                <div data-aos="fade-up" data-aos-delay="300" className="col-start-4 row-start-1 row-span-3 border rounded-md p-7 bg-gray-50 dark:bg-[#0a0a0a]">
                     <div className="flex items-center gap-1 mb-5">
                         <ShieldCheck size={17} />
                         <h1 className="text-lg font-bold">Community Rules</h1>
@@ -74,7 +74,7 @@ export default function About({name}:pageProps) {
                     </ul>
 
                 </div>
-                <div data-aos="fade-up" data-aos-delay="400" className="col-start-3 col-span-2 row-start-4 row-span-3 border p-7 dark:bg-[#0a0a0a]">
+                <div data-aos="fade-up" data-aos-delay="400" className="col-start-3 col-span-2 row-start-4 row-span-3 border p-7 bg-gray-50 dark:bg-[#0a0a0a] rounded-md">
                     <div className="flex items-center gap-1 mb-5">
                         <Lock size={17} />
                         <h1 className="text-lg font-bold">Privacy</h1>
@@ -86,7 +86,7 @@ export default function About({name}:pageProps) {
             <div
                 data-aos="fade-up"
                 data-aos-delay="500"
-                className="relative overflow-hidden  dark:bg-[#0a0a0a] bg-[#f9fafb] py-24 px-6 flex flex-col items-center justify-center min-h-[60vh]"
+                className="relative overflow-hidden  dark:bg-[#0a0a0a] bg-[#f9fafb] py-24 px-6 flex flex-col items-center justify-center min-h-[60vh] rounded-md"
             >
                 {/* Background Accent - Subtle Minimalist Element */}
                 <QuoteIcon

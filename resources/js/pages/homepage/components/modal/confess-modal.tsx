@@ -13,9 +13,10 @@ type pageProps = {
     onClose: () => void
     emotions: Emotion[]
     type: 'rant' | 'secret'
+    setCoolDown: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function ConfessModal({openModal, onClose, type}:pageProps) {
+export default function ConfessModal({openModal, onClose, type, setCoolDown}:pageProps) {
     return (
         <Dialog open={openModal} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-2xl w-full z-1000">
@@ -27,6 +28,7 @@ export default function ConfessModal({openModal, onClose, type}:pageProps) {
                 </DialogHeader>
 
                 <SecretForm
+                    setCoolDown={setCoolDown}
                     type={type}
                     onClose={onClose}
                 />

@@ -12,19 +12,22 @@ import { Textarea } from "@/components/ui/textarea"
 type pageProps = {
     onClose: () => void
     type: 'rant' | 'secret'
+    setCoolDown: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function SecretForm({onClose,type}:pageProps) {
+export default function SecretForm({onClose,type, setCoolDown}:pageProps) {
     const { data, setData, post, processing, errors, reset } = useForm<{
         nickname: string
         to_whom: string
         message: string
         type: string
+        music_url: string
     }>({
         nickname: '',
         to_whom: '',
         message: '',
         type: type,
+        music_url: ''
     })
 
     useEffect(() => {
@@ -37,6 +40,7 @@ export default function SecretForm({onClose,type}:pageProps) {
             onSuccess: () => {
                 reset()
                 onClose();
+                setCoolDown(10)
             }
         })
     }
@@ -80,6 +84,27 @@ export default function SecretForm({onClose,type}:pageProps) {
                             className="resize-none dark:bg-[#000000] dark:border-[#181818]"
                         />
                         {errors.message && <p className="errors text-xs text-destructive">{errors.message}</p>}
+                    </Field>
+
+                    <Field>
+                        <FieldLabel htmlFor="receipient">Add music <span className="text-blue-500">(Optional)</span></FieldLabel>
+                        <div className="flex items-center gap-1">
+                            <div className="border p-1.5 rounded-md">
+                                <img
+                                    src='./images/spotify.svg'
+                                    alt="spotify"
+                                    className="h-5 dark:invert-100"
+                                />
+                            </div>
+                            <Input
+                                value={data.music_url}
+                                onChange={(e) => setData('music_url', e.target.value)}
+                                id="music_url"
+                                autoComplete="on"
+                                placeholder="Paste a spotify link here to match your feeling"
+                            />
+                            {errors.nickname && <p className="errors text-xs text-destructive">{errors.music_url}</p>}
+                        </div>
                     </Field>
                 </FieldGroup>
 

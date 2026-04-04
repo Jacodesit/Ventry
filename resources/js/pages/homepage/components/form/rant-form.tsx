@@ -14,9 +14,10 @@ type pageProps = {
     onClose: () => void
     emotions: Emotion[]
     type: 'rant' | 'secret'
+    setCoolDown: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function RantForm({onClose, emotions,type}:pageProps) {
+export default function RantForm({onClose, emotions,type, setCoolDown}:pageProps) {
     const { data, setData, post, processing, errors, reset } = useForm<{
         nickname: string
         emotion_id: number | ''
@@ -41,6 +42,7 @@ export default function RantForm({onClose, emotions,type}:pageProps) {
             onSuccess: () => {
                 reset()
                 onClose();
+                setCoolDown(10)
             }
         })
     }

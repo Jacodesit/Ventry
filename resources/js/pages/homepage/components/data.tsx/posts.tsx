@@ -2,6 +2,7 @@ import { Smile } from 'lucide-react';
 import { useState, useRef, useEffect } from "react"
 import type { Post, Reaction } from "@/types/post"
 import PostHeader from "../modal/header/post-header"
+import ViewModal from '../modal/view-modal';
 import WelcomeModal from "../modal/welcome-modal"
 
 type pageProps = {
@@ -11,14 +12,21 @@ type pageProps = {
 }
 
 export default function Posts({posts, reactions, type}:pageProps) {
-    const [showWelcome, setShowWelcome] = useState(true);
+    const [showWelcome, setShowWelcome] = useState(() => {
+        const seen = localStorage.getItem('ventry_welcome_seen');
+
+        return !seen;
+    });
+
     const [activePostId, setActivePostId] = useState<number | null>(null);
+    const [selectedPost, setSelectedPost] = useState<Post | null>(null)
+
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setActivePostId(null);
+        const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+            setActivePostId(null);
         }
     };
 
@@ -33,27 +41,40 @@ export default function Posts({posts, reactions, type}:pageProps) {
                 <div
                     key={post.id}
                     data-aos="fade-up"
-                    className={`break-inside-avoid mb-6 border rounded-md transition-all duration-300 z-50 dark:bg-[#0A0A0A]
-                        ${post.type === 'rant' ? 'bg-white '  : 'bg-gray-50'}`}
+                    className={`break-inside-avoid mb-6 border rounded-md transition-all duration-300 z-50
+                        ${post.type === 'rant' ? 'bg-white dark:bg-[#0A0A0A]'  : 'bg-gray-50 dark:bg-[#121212]'}`}
                 >
                     <PostHeader post={post} type={type}/>
 
                     {/* Message Section */}
                     <div className="px-5 py-5 border-b">
-                        {post.type === 'rant' ? (
-                            <p className="text-xs text-gray-500 mb-1">Message:</p>
+                        {post.type === 'secret' ? (
+                            <div className='flex items-center gap-1 mb-1'>
+                                <p className="text-xs text-gray-500 bg-gray-200 dark:bg-[#0a0a0a] dark:text-muted-foreground inline-block px-3 py-1 rounded-lg ">
+                                    To: {post.to_whom || 'Someone'}
+                                </p>
+                                {post.music_url && (
+                                        <img
+                                        src="./images/spotify.svg"
+                                        alt="spotify"
+                                        className='h-4 dark:invert-100'
+                                    />
+                                )}
+                            </div>
                         ) : (
-                            <p className="text-xs text-gray-500 bg-gray-200 inline-block px-3 py-1 rounded-lg mb-1">To: {post.to_whom || 'Someone'}</p>
+                            <p className="text-xs text-gray-500 mb-1">Message:</p>
                         )}
                         <p className="whitespace-pre-wrap italic">{post.message}</p>
                     </div>
+
+
 
                     {/* Reactions Section */}
                     <div className='px-5 py-2 flex items-center'>
                         <div
                             ref={containerRef}
                             onClick={() => setActivePostId(activePostId === post.id ? null : post.id)}
-                            className="inline-block relative"
+                            className="inline-block relative w-full"
                         >
                             {activePostId === post.id && (
                                 <div className='absolute -top-16 left-1/2 -translate-x-1/2 flex gap-2 p-1.5
@@ -69,7 +90,6 @@ export default function Posts({posts, reactions, type}:pageProps) {
                                         >
                                             <span className="text-xl leading-none">{reaction.emoji}</span>
 
-                                            {/* Tooltip-style name that appears on hover */}
                                             <span className='absolute -top-8 scale-0 group-hover:scale-100
                                                     transition-transform bg-slate-800 text-white
                                                     text-[10px] px-2 py-1 rounded-md pointer-events-none'>
@@ -80,10 +100,23 @@ export default function Posts({posts, reactions, type}:pageProps) {
                                 </div>
                             )}
 
-                            <button className="p-2 rounded-full text-slate-500 hover:bg-slate-100
-                                            hover:text-slate-900 transition-colors">
-                                <Smile size={22} strokeWidth={1.5} />
-                            </button>
+                            <div className='flex justify-between'>
+                                <button
+                                    className="inline-block p-2 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                                >
+                                    <Smile size={22} strokeWidth={1.5} />
+                                </button>
+
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        setSelectedPost(post)
+                                    }}
+                                    className='text-xs text-gray-500 cursor-pointer transition-all duration-300 hover:underline hover:text-foreground'
+                                >
+                                    View Post
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -95,6 +128,13 @@ export default function Posts({posts, reactions, type}:pageProps) {
                     onClose={() => setShowWelcome(false)}
                 />
             )}
+
+            <ViewModal
+                reactions={reactions}
+                post={selectedPost}
+                open={selectedPost !== null}
+                onClose={() => setSelectedPost(null)}
+            />
         </section>
     )
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class PostController extends Controller
 {
@@ -30,15 +31,33 @@ class PostController extends Controller
     {
         $type = $request->input('type');
 
+        $ip = $request->ip();
+        $lastPost = Post::where('ip_address', $ip)
+            ->latest()
+            ->first();
+
         $rules = [
             'nickname' => 'nullable|string|max:50',
             'message'  => 'required|string|max:1000',
             'to_whom'  => 'nullable|string|max:50',
+            'music_url'=> 'nullable|url'
         ];
 
         if ($type === 'rant') {
             $rules['emotion_id'] = 'nullable|integer|exists:emotions,id|required_without:custom_emotion';
             $rules['custom_emotion'] = 'nullable|string|max:30|required_without:emotion_id';
+        }
+
+        if ($lastPost) {
+            $secondsPassed = Carbon::parse($lastPost->created_at)->diffInSeconds(now());
+
+            if ($secondsPassed < 10) {
+                $remaining = 10 - $secondsPassed;
+
+                return back()->withErrors([
+                    'cooldown' => "Wait {$remaining}s before posting again."
+                ]);
+            }
         }
 
         $validated = $request->validate($rules);
