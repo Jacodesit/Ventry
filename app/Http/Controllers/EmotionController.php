@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Emotion;
 use App\Models\Post;
+use App\Models\PostReaction;
 use App\Models\Reaction;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 
 class EmotionController extends Controller
 {
@@ -17,9 +19,37 @@ class EmotionController extends Controller
     {
         $emotions = Emotion::all();
         $reactions = Reaction::all();
-        $posts = Post::with('emotion')->latest()->get();
+        $posts = Post::with('emotion')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
 
-        return inertia::render('homepage/page', [
+        // Manually add reaction data to each post
+        foreach ($posts as $post) {
+            // Get reaction counts using the PostReaction model
+            $reactionGroups = PostReaction::where('post_id', $post->id)
+                ->select('reaction_id', DB::raw('COUNT(*) as count'))
+                ->groupBy('reaction_id')
+                ->get();
+
+            // Format reactions for the frontend
+            $formattedReactions = [];
+            foreach ($reactionGroups as $group) {
+                $reaction = $reactions->firstWhere('id', $group->reaction_id);
+                if ($reaction) {
+                    $formattedReactions[] = [
+                        'id' => $reaction->id,
+                        'emoji' => $reaction->emoji,
+                        'name' => $reaction->name,
+                        'count' => $group->count
+                    ];
+                }
+            }
+
+            // Add the reactions to the post object
+            $post->reactions = $formattedReactions;
+        }
+
+        return Inertia::render('homepage/page', [
             'emotions' => $emotions,
             'reactions' => $reactions,
             'posts' => $posts

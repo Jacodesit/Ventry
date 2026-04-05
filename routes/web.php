@@ -11,4 +11,5 @@ Route::get('/', fn() => Inertia::render('welcome'))->name('index');
 Route::get('/wall', [EmotionController::class, 'index'])->name('wall');
 Route::resource('posts', PostController::class)->except('index');
 Route::get('/about', fn() => Inertia::render('aboutpage/page'))->name('about');
+Route::post('/react', [PostController::class, 'react'])->name('post.react');
 require __DIR__.'/settings.php';

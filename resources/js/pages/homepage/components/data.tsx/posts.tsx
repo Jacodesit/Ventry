@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react"
 import { Smile } from 'lucide-react';
 import { useState, useRef, useEffect } from "react"
 import type { Post, Reaction } from "@/types/post"
@@ -20,23 +21,59 @@ export default function Posts({posts, reactions, type}:pageProps) {
 
     const [activePostId, setActivePostId] = useState<number | null>(null);
     const [selectedPost, setSelectedPost] = useState<Post | null>(null)
+    const [isReacting, setIsReacting] = useState<number | null>(null); // Track which post is reacting
 
-    const containerRef = useRef<HTMLDivElement>(null);
+    // Create a ref for each post
+    const postRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-            setActivePostId(null);
+            // Check if click is outside any post's reaction container
+            if (activePostId !== null) {
+                const currentRef = postRefs.current[activePostId];
+
+                if (currentRef && !currentRef.contains(event.target as Node)) {
+                    setActivePostId(null);
+                }
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [activePostId]);
+
+    const handleReact = (postId: number, reactionId: number) => {
+        // Prevent multiple rapid clicks
+        if (isReacting === postId) {
+            return;
         }
+
+        setIsReacting(postId);
+
+        router.post('/react', {
+            post_id: postId,
+            reaction_id: reactionId
+        }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setActivePostId(null);
+                setIsReacting(null);
+                router.reload({ only: ['posts'] });
+            },
+            onError: () => {
+                setIsReacting(null);
+            }
+        });
     };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
 
     return (
         <section className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6 pb-5">
+            {posts.length === 0 && (
+                <div className="h-[90vh] flex items-center justify-center text-gray-500">
+                    No post yet. Be the first to share something.
+                </div>
+            )}
             {posts.map(post => (
                 <div
                     key={post.id}
@@ -54,7 +91,7 @@ export default function Posts({posts, reactions, type}:pageProps) {
                                     To: {post.to_whom || 'Someone'}
                                 </p>
                                 {post.music_url && (
-                                        <img
+                                    <img
                                         src="./images/spotify.svg"
                                         alt="spotify"
                                         className='h-4 dark:invert-100'
@@ -64,15 +101,15 @@ export default function Posts({posts, reactions, type}:pageProps) {
                         ) : (
                             <p className="text-xs text-gray-500 mb-1">Message:</p>
                         )}
-                        <p className="whitespace-pre-wrap italic">{post.message}</p>
+                        <div className="">
+                            <p className="whitespace-pre-wrap italic">{post.message}</p>
+                        </div>
                     </div>
-
-
 
                     {/* Reactions Section */}
                     <div className='px-5 py-2 flex items-center'>
                         <div
-                            ref={containerRef}
+                            ref={el => postRefs.current[post.id] = el}
                             onClick={() => setActivePostId(activePostId === post.id ? null : post.id)}
                             className="inline-block relative w-full"
                         >
@@ -80,19 +117,24 @@ export default function Posts({posts, reactions, type}:pageProps) {
                                 <div className='absolute -top-16 left-1/2 -translate-x-1/2 flex gap-2 p-1.5
                                                 bg-white backdrop-blur-md border border-slate-200/60
                                                 rounded-full shadow-xl shadow-black/5 animate-in fade-in
-                                                zoom-in-95 duration-200 dark:bg-[#000000] dark:border-none'>
+                                                zoom-in-95 duration-200 dark:bg-[#000000] dark:border-none z-50'>
                                     {reactions.map(reaction => (
                                         <div
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                handleReact(post.id, reaction.id)
+                                            }}
                                             key={reaction.id}
-                                            className="group flex flex-col items-center justify-center
+                                            className={`group flex flex-col items-center justify-center
                                                     w-10 h-10 rounded-full transition-all duration-200
-                                                    hover:bg-white hover:dark:bg-[#0a0a0a] hover:scale-125 hover:shadow-sm cursor-pointer"
+                                                    hover:bg-white hover:dark:bg-[#0a0a0a] hover:scale-125 hover:shadow-sm cursor-pointer
+                                                    ${isReacting === post.id ? 'opacity-50 pointer-events-none' : ''}`}
                                         >
                                             <span className="text-xl leading-none">{reaction.emoji}</span>
 
                                             <span className='absolute -top-8 scale-0 group-hover:scale-100
                                                     transition-transform bg-slate-800 text-white
-                                                    text-[10px] px-2 py-1 rounded-md pointer-events-none'>
+                                                    text-[10px] px-2 py-1 rounded-md pointer-events-none whitespace-nowrap'>
                                                 {reaction.name}
                                             </span>
                                         </div>
@@ -100,12 +142,31 @@ export default function Posts({posts, reactions, type}:pageProps) {
                                 </div>
                             )}
 
-                            <div className='flex justify-between'>
+                            <div className='flex justify-between items-center'>
                                 <button
                                     className="inline-block p-2 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                                    disabled={isReacting === post.id}
                                 >
                                     <Smile size={22} strokeWidth={1.5} />
                                 </button>
+
+                                {/* Reaction Counts */}
+                                <div className="flex gap-1 flex-wrap">
+                                    {post.reactions && post.reactions.length > 0 ? (
+                                        post.reactions.map(r => (
+                                            <span
+                                                key={r.id}
+                                                className={`text-xs flex items-center gap-1 px-2 py-1 rounded-md
+                                                        ${post.type ===  'rant' ? 'bg-gray-50 dark:bg-[#121212]' : 'bg-gray-200 dark:bg-[#0a0a0a]'}
+                                                    `}
+                                            >
+                                                {r.emoji} {r.count}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <span className="text-xs text-gray-400 px-2 py-1">No reactions yet</span>
+                                    )}
+                                </div>
 
                                 <button
                                     onClick={(e) => {

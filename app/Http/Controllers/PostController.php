@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -38,7 +39,7 @@ class PostController extends Controller
 
         $rules = [
             'nickname' => 'nullable|string|max:50',
-            'message'  => 'required|string|max:1000',
+            'message'  => 'required|string|max:10000',
             'to_whom'  => 'nullable|string|max:50',
             'music_url'=> 'nullable|url'
         ];
@@ -100,5 +101,29 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+    }
+
+    public function react(Request $request)
+    {
+        $validated = $request->validate([
+            'post_id' => 'required|exists:posts,id',
+            'reaction_id' => 'required|exists:reactions,id',
+        ]);
+
+        $ip = $request->ip();
+
+        DB::table('post_reactions')->updateOrInsert(
+            [
+                'post_id' => $validated['post_id'],
+                'ip_address' => $ip,
+            ],
+            [
+                'reaction_id' => $validated['reaction_id'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+
+        return back();
     }
 }
