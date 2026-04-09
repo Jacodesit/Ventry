@@ -1,5 +1,6 @@
 import { useForm } from "@inertiajs/react"
 import { useEffect } from "react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
     Field,
@@ -9,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import type { Emotion } from "@/types/post"
+
 
 type pageProps = {
     onClose: () => void
@@ -40,6 +42,7 @@ export default function RantForm({onClose, emotions,type, setCoolDown}:pageProps
         e.preventDefault()
         post('/posts', {
             onSuccess: () => {
+                toast.success('Rant posted successfully.')
                 reset()
                 onClose();
                 setCoolDown(10)
@@ -120,8 +123,6 @@ export default function RantForm({onClose, emotions,type, setCoolDown}:pageProps
                         {errors.message && <p className="errors text-xs text-destructive">{errors.message}</p>}
                     </Field>
                 </FieldGroup>
-                {/* <ScrollBar orientation="vertical" /> */}
-
 
                 <Field className="flex justify-end border-t pt-2 mt-4" orientation="horizontal">
                     <Button

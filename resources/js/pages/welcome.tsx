@@ -2,17 +2,27 @@ import { usePage } from "@inertiajs/react";
 import { Link } from "@inertiajs/react"
 import AOS from "aos";
 import { SquarePen } from 'lucide-react';
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Header from "@/components/heading"
 import "aos/dist/aos.css";
+import type { Quote } from "@/types/post";
 
 type pageProps = {
     name: string
+    quotes: Quote[]
 }
 
 export default function Welcome({name}:pageProps) {
     const subtext = 'Share your thoughts anonymously. Express how you feel. Sometimes letting it out is enough.'
     const { component } = usePage();
+
+    const [quote, setQuote] = useState<Quote | null>(null);
+
+    useEffect(() => {
+        fetch('/quotes')
+            .then(res => res.json())
+            .then(setQuote);
+    }, []);
 
     useEffect(() => {
         AOS.init({ duration: 500, once: true });
@@ -30,12 +40,20 @@ export default function Welcome({name}:pageProps) {
             {/*  */}
             <div
                 data-aos="zoom-in"
-                className="flex justify-center h-screen  md:items-center flex-col gap-10 md:gap-20 z-90 px-5 md:px-0"
+                className="flex justify-center h-screen md:items-center flex-col gap-10 md:gap-20 z-90 px-5 md:px-0"
             >
                 <div className="flex flex-col gap-1">
                     <h1 className="headline text-5xl lg:text-7xl font-extrabold">Say what you cant say <span className="text-blue-500 underline">out loud</span></h1>
                     <p className="subtext text-left md:text-center text-lg">{subtext}</p>
                 </div>
+
+                {quote && (
+                    <div className="text-center shadow-lg px-10 py-5 rounded-md bg-[#0a0a0a]/10">
+                        <p className="text-xs mb-5 font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-neutral-500">Quotes for today</p>
+                        <p className=" italic">"{quote.text}"</p>
+                        <p className="mt-2">— {quote.author}</p>
+                    </div>
+                )}
 
                 <div className="">
                     <Link
@@ -46,6 +64,8 @@ export default function Welcome({name}:pageProps) {
                         Publish Now
                     </Link>
                 </div>
+
+
             </div>
         </main>
 

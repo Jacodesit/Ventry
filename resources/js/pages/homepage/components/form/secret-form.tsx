@@ -1,5 +1,6 @@
 import { useForm } from "@inertiajs/react"
 import { useEffect } from "react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
     Field,
@@ -38,6 +39,7 @@ export default function SecretForm({onClose,type, setCoolDown}:pageProps) {
         e.preventDefault()
         post('/posts', {
             onSuccess: () => {
+                toast.success('Secret posted successfully.')
                 reset()
                 onClose();
                 setCoolDown(10)

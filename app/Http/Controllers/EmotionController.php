@@ -15,23 +15,38 @@ class EmotionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $emotions = Emotion::all();
         $reactions = Reaction::all();
-        $posts = Post::with('emotion')
-                    ->orderBy('created_at', 'desc')
-                    ->get();
 
-        // Manually add reaction data to each post
+        // Get the filter from the request
+        $filter = $request->query('filter');
+
+        // Start the query
+        $query = Post::with('emotion');
+
+        // Apply filter if provided
+        if ($filter === 'rant') {
+            $query->where('type', 'rant');
+        } elseif ($filter === 'secret') {
+            $query->where('type', 'secret');
+        }
+
+        // Order and paginate
+        $posts = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        // This is important - preserve the filter parameter in pagination links
+        if ($filter) {
+            $posts->appends(['filter' => $filter]);
+        }
+
         foreach ($posts as $post) {
-            // Get reaction counts using the PostReaction model
             $reactionGroups = PostReaction::where('post_id', $post->id)
                 ->select('reaction_id', DB::raw('COUNT(*) as count'))
                 ->groupBy('reaction_id')
                 ->get();
 
-            // Format reactions for the frontend
             $formattedReactions = [];
             foreach ($reactionGroups as $group) {
                 $reaction = $reactions->firstWhere('id', $group->reaction_id);
@@ -44,15 +59,16 @@ class EmotionController extends Controller
                     ];
                 }
             }
-
-            // Add the reactions to the post object
             $post->reactions = $formattedReactions;
         }
 
         return Inertia::render('homepage/page', [
             'emotions' => $emotions,
             'reactions' => $reactions,
-            'posts' => $posts
+            'posts' => $posts,
+            'filters' => [
+                'type' => $filter
+            ]
         ]);
     }
 

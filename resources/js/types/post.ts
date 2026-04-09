@@ -1,3 +1,9 @@
+export type Quote = {
+    id: number,
+    text: string,
+    author: string
+}
+
 export type Emotion = {
     id: number,
     name: string,

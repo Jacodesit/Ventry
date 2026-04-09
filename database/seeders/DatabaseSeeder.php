@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             EmotionSeeder::class,
             ReactionSeeder::class,
+            QuoteSeeder::class,
         ]);
     }
 }

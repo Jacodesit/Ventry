@@ -4,6 +4,8 @@ import React from "react"
 import { useEffect } from "react"
 import "aos/dist/aos.css";
 import Header from "@/components/heading"
+import { Toaster } from "@/components/ui/sonner"
+
 
 type pageProps = {
     children: React.ReactNode
@@ -24,6 +26,7 @@ export default function AppLayout({children, name}:pageProps) {
     return (
         <main className="">
             <Header name={name} />
+            <Toaster position="top-right"  />
             <div className="py-20 px-5 md:px-15 lg:px-50 dark:bg-[#000000]">
                 {children}
             </div>

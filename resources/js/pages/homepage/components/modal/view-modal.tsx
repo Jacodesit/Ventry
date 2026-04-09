@@ -1,6 +1,6 @@
+import { router, usePage } from "@inertiajs/react"
 import { Smile } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
-import { router, usePage } from "@inertiajs/react"
 
 import {
     Dialog,
@@ -18,8 +18,17 @@ type pageProps = {
     onClose: () => void
 }
 
-export default function ViewModal({post, open, onClose, reactions}:pageProps) {
-    const { props } = usePage();
+// Define the expected shape of page props
+type SharedProps = {
+    posts?: {
+        data: Post[]
+        [key: string]: any
+    }
+    [key: string]: any
+}
+
+export default function ViewModal({post, open, onClose, reactions}: pageProps) {
+    const { props } = usePage<SharedProps>();
     const emotionText = post?.custom_emotion || post?.emotion?.name || '';
     const isLongText = emotionText.length > 12;
     const [activePostId, setActivePostId] = useState<number | null>(null);
@@ -40,7 +49,6 @@ export default function ViewModal({post, open, onClose, reactions}:pageProps) {
     }, []);
 
     const handleReact = (postId: number, reactionId: number) => {
-        // Prevent multiple rapid clicks
         if (isReacting === postId) {
             return;
         }
@@ -55,7 +63,6 @@ export default function ViewModal({post, open, onClose, reactions}:pageProps) {
             onSuccess: () => {
                 setActivePostId(null);
                 setIsReacting(null);
-                // This reloads the posts data
                 router.reload({ only: ['posts'] });
             },
             onError: () => {
@@ -64,12 +71,15 @@ export default function ViewModal({post, open, onClose, reactions}:pageProps) {
         });
     };
 
-    if(!open) {
+    if(!open || !post) {
         return null
     }
 
-    // Get the latest post data from the page props (this is the key fix)
-    const currentPost = props.posts?.find((p: Post) => p.id === post?.id) || post;
+    // Safely find the current post from the shared props
+    const postsData = props.posts?.data;
+    const currentPost = Array.isArray(postsData)
+        ? postsData.find((p: Post) => p.id === post.id) || post
+        : post;
 
     const getSpotifyEmbed = (url: string) => {
         return url.replace("open.spotify.com", "open.spotify.com/embed")
@@ -173,7 +183,7 @@ export default function ViewModal({post, open, onClose, reactions}:pageProps) {
                                         </div>
                                     </div>
 
-                                    {/* Reaction Counts - Now updates in real-time */}
+                                    {/* Reaction Counts */}
                                     <div className="flex gap-1 flex-wrap">
                                         {currentPost.reactions && currentPost.reactions.length > 0 ? (
                                             currentPost.reactions.map(r => (
@@ -277,7 +287,7 @@ export default function ViewModal({post, open, onClose, reactions}:pageProps) {
                                         </div>
                                     </div>
 
-                                    {/* Reaction Counts - Now updates in real-time */}
+                                    {/* Reaction Counts */}
                                     <div className="flex gap-1 flex-wrap">
                                         {currentPost?.reactions && currentPost.reactions.length > 0 ? (
                                             currentPost.reactions.map(r => (

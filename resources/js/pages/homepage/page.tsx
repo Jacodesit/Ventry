@@ -11,7 +11,10 @@ import RantModal from './components/modal/rant-modal'
 type pageProps = {
     name: string
     emotions: Emotion[]
-    posts: Post[]
+    posts: {
+        data: Post[]
+        links: { url: string | null; label: string; active: boolean }[];
+    }
     reactions: Reaction[]
 }
 
