@@ -11,7 +11,8 @@ export default function Header({name}:pageProps) {
 
     const links = [
         {name: 'Wall', href: '/wall'},
-        {name: 'About', href: '/about'}
+        {name: 'About', href: '/about'},
+        {name: 'Feedback', href: '/feedback'}
     ]
 
     const [darkMode, setDarkMode] = useState(() => {

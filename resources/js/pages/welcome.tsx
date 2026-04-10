@@ -1,4 +1,4 @@
-import { usePage } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { Link } from "@inertiajs/react"
 import AOS from "aos";
 import { SquarePen } from 'lucide-react';
@@ -25,6 +25,21 @@ export default function Welcome({name}:pageProps) {
     }, []);
 
     useEffect(() => {
+        const now = new Date()
+
+        const nextMidnight = new Date()
+        nextMidnight.setHours(24, 0, 0, 0)
+
+        const timeUntilMidnight = nextMidnight.getTime() - now.getTime()
+
+        const timer = setTimeout(() => {
+            router.reload({ only: ['quote'] })
+        }, timeUntilMidnight)
+
+        return () => clearTimeout(timer)
+    }, [])
+
+    useEffect(() => {
         AOS.init({ duration: 500, once: true });
     }, []);
 
@@ -39,23 +54,23 @@ export default function Welcome({name}:pageProps) {
             <Header name={name} />
             {/*  */}
             <div
-                data-aos="zoom-in"
+
                 className="flex justify-center h-screen md:items-center flex-col gap-10 md:gap-20 z-90 px-5 md:px-0"
             >
-                <div className="flex flex-col gap-1">
+                <div data-aos="fade-up" data-aos-delay="500"  className="flex flex-col gap-1">
                     <h1 className="headline text-5xl lg:text-7xl font-extrabold">Say what you cant say <span className="text-blue-500 underline">out loud</span></h1>
                     <p className="subtext text-left md:text-center text-lg">{subtext}</p>
                 </div>
 
                 {quote && (
-                    <div className="text-center shadow-lg px-10 py-5 rounded-md bg-[#0a0a0a]/10">
+                    <div data-aos="fade-up" data-aos-delay="700" className="text-center px-10 py-5 rounded-md bg-gray-100/20 dark:shadow-2xl dark:bg-[#0a0a0a]/10">
                         <p className="text-xs mb-5 font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-neutral-500">Quotes for today</p>
                         <p className=" italic">"{quote.text}"</p>
                         <p className="mt-2">— {quote.author}</p>
                     </div>
                 )}
 
-                <div className="">
+                <div data-aos="fade-up" data-aos-delay="900">
                     <Link
                         href={'/wall'}
                         className="border text-xs md:text-sm px-6 py-2 rounded-md transition-all duration-300 hover:bg-accent-foreground hover:text-muted flex items-center gap-2"
