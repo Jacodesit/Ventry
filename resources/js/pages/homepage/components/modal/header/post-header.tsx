@@ -1,4 +1,8 @@
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
 import type { Post } from "@/types/post"
+
+dayjs.extend(relativeTime)
 
 type pageProps = {
     post: Post
@@ -30,11 +34,8 @@ export default function PostHeader({ post }: pageProps) {
                     <h4 className="m-0 text-base font-bold dark:text-accent-foreground tracking-tight">
                         {post?.nickname || 'Anonymous'}
                     </h4>
-                    <p className="text-[10px] uppercase font-medium text-slate-400 tracking-wider">
-                        {new Date(post.created_at).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        })}
+                    <p className="text-[10px] font-medium text-slate-400 tracking-wider">
+                        {dayjs(post?.created_at).format('MMM D, YYYY')} • {dayjs(post?.created_at).fromNow()}
                     </p>
                 </div>
 

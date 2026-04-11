@@ -23,8 +23,26 @@ export default function About({name}:pageProps) {
 
     return (
         <AppLayout name={name}>
-            <div className="grid grid-cols-4 grid-rows-6 gap-2 py-10 mt-10 mb-20">
-                <div data-aos="fade-up" data-aos-delay="0" className="col-span-2 row-span-3 border rounded-md p-7 bg-gray-50 dark:bg-[#0a0a0a]">
+            <section className="grid grid-cols-2 items-center pt-10">
+                <div data-aos="fade-up" data-aos-delay="100" className="text-left h-50 justify-center flex flex-col">
+                    <h1 className="font-bold text-3xl md:text-4xl lg:text-6xl">
+                        {/* Voices From the Community */}
+                        What <span className="text-blue-500">Ventry</span> Is All <span className="text-blue-500">About</span>?
+                    </h1>
+                    <p className="text-sm md:text-base font-extralight text-gray-500">You can speak freely here, share honestly, and know you’ll be heard without judgment.</p>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="300" className="flex justify-end">
+
+                </div>
+            </section>
+
+            <div className="grid grid-cols-4 grid-rows-6 gap-2 pt-5 pb-10 mb-20">
+                <div
+                    data-aos="fade-up"
+                    data-aos-delay="0"
+                    className="col-span-2 row-span-3 border rounded-md p-7 bg-gray-50 dark:bg-[#0a0a0a]"
+                >
                     <div className="flex items-center gap-1 mb-5">
                         <Info size={17} />
                         <h1 className="text-lg font-bold">What is Ventry?</h1>
