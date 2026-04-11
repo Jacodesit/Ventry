@@ -7,6 +7,7 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs"
 import type { Post, Reaction } from "@/types/post"
+import FeedbackModal from "../modal/feedback-modal";
 import PostHeader from "../modal/header/post-header"
 import ViewModal from '../modal/view-modal';
 import WelcomeModal from "../modal/welcome-modal"
@@ -37,6 +38,7 @@ export default function Posts({posts, reactions = [], type = 'rant'}: pageProps)
     const [activePostId, setActivePostId] = useState<number | null>(null);
     const [selectedPost, setSelectedPost] = useState<Post | null>(null)
     const [isReacting, setIsReacting] = useState<number | null>(null);
+    const [openFeedback, setOpenFeedback] = useState(false);
 
     // Get current filter from URL or default to 'all'
     const urlParams = new URLSearchParams(window.location.search);
@@ -107,7 +109,7 @@ export default function Posts({posts, reactions = [], type = 'rant'}: pageProps)
 
     return (
         <section className="p-5 flex flex-col justify-between">
-            <div>
+            <div data-aos="fade-up">
                 <Tabs
                     className="mb-5 flex justify-end items-end"
                     value={filter}
@@ -224,7 +226,6 @@ export default function Posts({posts, reactions = [], type = 'rant'}: pageProps)
                                             <Smile size={22} strokeWidth={1.5} />
                                         </button>
 
-                                        {/* Reaction Counts */}
                                         <div className="flex gap-1 flex-wrap">
                                             {post.reactions && post.reactions.length > 0 ? (
                                                 post.reactions.map(r => (
@@ -274,7 +275,7 @@ export default function Posts({posts, reactions = [], type = 'rant'}: pageProps)
             </div>
 
             {safePosts.links.length > 3 && (
-                <div className="flex gap-2 mt-4 justify-end py-8">
+                <div data-aos="fade-up" className="flex gap-2 mt-4 justify-end py-8">
                     {safePosts.links.map((link, index) => {
                         let label: React.ReactNode = link.label;
 
@@ -305,6 +306,21 @@ export default function Posts({posts, reactions = [], type = 'rant'}: pageProps)
                     })}
                 </div>
             )}
+
+            <div data-aos="fade-up" data-aos-delay="200" className="h-auto py-30 rounded-md bg-gray-50 dark:bg-[#121212] mt-20 text-center">
+                <h1 className="text-5xl font-semibold mb-5">How did Ventry make you feel?</h1>
+                <button
+                    onClick={() => setOpenFeedback(true)}
+                    className="rounded-lg px-8 py-3 bg-gray-100 dark:bg-[#0a0a0a] cursor-pointer transition-all duration-300 hover:bg-gray-500 hover:text-white dark:hover:bg-gray-50/20"
+                >
+                    Give feedback
+                </button>
+            </div>
+
+            <FeedbackModal
+                openFeedback={openFeedback}
+                onClose={() => setOpenFeedback(false)}
+            />
         </section>
     )
 }

@@ -38,7 +38,7 @@ export default function Home({name, emotions, posts, reactions}:pageProps) {
     return (
         <AppLayout name={name}>
             <div className='flex flex-col gap-5'>
-                <section className="flex justify-center items-center h-80 flex-col gap-5">
+                <section data-aos="fade-up" className="flex justify-center items-center h-80 flex-col gap-5">
                     <div className="text-center">
                         <h1 className="font-bold text-3xl md:text-5xl lg:text-7xl">
                             <Typewriter

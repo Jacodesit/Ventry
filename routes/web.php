@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\EmotionController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\QuoteController;
 use Illuminate\Support\Facades\Route;
@@ -14,5 +15,7 @@ Route::resource('posts', PostController::class)->except('index');
 Route::get('/about', fn() => Inertia::render('aboutpage/page'))->name('about');
 Route::post('/react', [PostController::class, 'react'])->name('post.react');
 Route::get('/quotes', [QuoteController::class, 'getQuote'])->name('post.quote');
-
+Route::get('/feedback', [FeedbackController::class, 'index'])->name('index.feedback');
+// For submtting a feedback
+Route::post('/feedback', [FeedbackController::class, 'store'])->name('post.feedback');
 require __DIR__.'/settings.php';

@@ -4,6 +4,15 @@ export type Quote = {
     author: string
 }
 
+export type Feedback = {
+    id: number,
+    nickname: string,
+    rating: number,
+    feedback_message: string,
+    experience_type: 'bug' | 'suggestion' | 'general_feedback' | 'feature_request',
+    created_at: string
+}
+
 export type Emotion = {
     id: number,
     name: string,

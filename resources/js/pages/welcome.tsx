@@ -54,7 +54,6 @@ export default function Welcome({name}:pageProps) {
             <Header name={name} />
             {/*  */}
             <div
-
                 className="flex justify-center h-screen md:items-center flex-col gap-10 md:gap-20 z-90 px-5 md:px-0"
             >
                 <div data-aos="fade-up" data-aos-delay="500"  className="flex flex-col gap-1">
@@ -63,7 +62,7 @@ export default function Welcome({name}:pageProps) {
                 </div>
 
                 {quote && (
-                    <div data-aos="fade-up" data-aos-delay="700" className="text-center px-10 py-5 rounded-md bg-gray-100/20 dark:shadow-2xl dark:bg-[#0a0a0a]/10">
+                    <div data-aos="fade-up" data-aos-delay="700" className="text-center px-10 py-5 rounded-md bg-gray-50/20 border dark:shadow-2xl dark:bg-[#0a0a0a]/10">
                         <p className="text-xs mb-5 font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-neutral-500">Quotes for today</p>
                         <p className=" italic">"{quote.text}"</p>
                         <p className="mt-2">— {quote.author}</p>
@@ -79,8 +78,6 @@ export default function Welcome({name}:pageProps) {
                         Publish Now
                     </Link>
                 </div>
-
-
             </div>
         </main>
 

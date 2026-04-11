@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Emotion;
+use App\Models\Feedback;
 use App\Models\Post;
 use App\Models\PostReaction;
 use App\Models\Reaction;
@@ -19,24 +20,20 @@ class EmotionController extends Controller
     {
         $emotions = Emotion::all();
         $reactions = Reaction::all();
+        $feedback = Feedback::all();
 
-        // Get the filter from the request
         $filter = $request->query('filter');
 
-        // Start the query
         $query = Post::with('emotion');
 
-        // Apply filter if provided
         if ($filter === 'rant') {
             $query->where('type', 'rant');
         } elseif ($filter === 'secret') {
             $query->where('type', 'secret');
         }
 
-        // Order and paginate
         $posts = $query->orderBy('created_at', 'desc')->paginate(10);
 
-        // This is important - preserve the filter parameter in pagination links
         if ($filter) {
             $posts->appends(['filter' => $filter]);
         }
@@ -66,6 +63,7 @@ class EmotionController extends Controller
             'emotions' => $emotions,
             'reactions' => $reactions,
             'posts' => $posts,
+            'feedback' => $feedback,
             'filters' => [
                 'type' => $filter
             ]
