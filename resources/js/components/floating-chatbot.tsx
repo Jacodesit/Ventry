@@ -129,6 +129,16 @@ const FloatingChatbot: React.FC = () => {
         }
     };
 
+    const handleNewChat = () => {
+        setMessages([
+            {
+                role: 'assistant',
+                content: "Hey. I'm here."
+            }
+        ]);
+        setHasUnread(false);
+    };
+
     return (
         <div className="fixed bottom-6 right-6 z-50">
             {/* Chat Window - Only visible when open */}
@@ -139,7 +149,7 @@ const FloatingChatbot: React.FC = () => {
                     dark:border-0"
                 >
                     {/* Header */}
-                    <div className="bg-linear-to-r from-blue-500 to-indigo-500 p-4">
+                    <div className="bg-blue-500 p-4 dark:bg-[#1e1e1e] flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                             <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                                 <span className="text-2xl">💭</span>
@@ -148,6 +158,15 @@ const FloatingChatbot: React.FC = () => {
                                 <h3 className="text-white font-semibold">Paul</h3>
                                 <p className="text-blue-100 text-sm">Safe space • You talk, I listen.</p>
                             </div>
+                        </div>
+                        <div>
+                            <button
+                                onClick={handleNewChat}
+                                className="text-white/70 hover:text-white text-sm px-2 py-1 rounded-lg hover:bg-white/10 transition-colors"
+                                title="Start fresh conversation"
+                            >
+                                + New
+                            </button>
                         </div>
                     </div>
 
@@ -197,7 +216,7 @@ const FloatingChatbot: React.FC = () => {
                     </div>
 
                     {/* Input Form */}
-                    <form onSubmit={handleSubmit} className="border-t border-gray-200 p-4 bg-white dark:bg-[#1e1e1e]">
+                    <form onSubmit={handleSubmit} className="border-t border-gray-200 p-4 bg-white dark:bg-[#1e1e1e] dark:border-0">
                         <div className="flex space-x-2">
                             <input
                                 ref={inputRef}
@@ -205,7 +224,8 @@ const FloatingChatbot: React.FC = () => {
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 placeholder="Say what you can't say out loud…"
-                                className="flex-1 rounded-full border-gray-300 focus:border-purple-500 focus:ring-purple-500 px-4 py-2 text-sm"
+                                className="flex-1 rounded-full border-gray-300 focus:border-purple-500 focus:ring-purple-500 px-4 py-2 text-sm
+                                dark:bg-[#0e0e0e] dark:focus:ring-0 dark:focus:border-0"
                                 disabled={isLoading}
                             />
                             <button
@@ -232,7 +252,7 @@ const FloatingChatbot: React.FC = () => {
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="relative bg-linear-to-r from-blue-500 to-indigo-500 text-white rounded-full w-14 h-14 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group"
+                    className="relative bg-blue-500 dark:bg-[#0a0a0a] text-white rounded-full w-14 h-14 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group"
                     aria-label="Open chat"
                 >
                     <span className="text-2xl">💭</span>
