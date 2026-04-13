@@ -13,6 +13,7 @@ export default function Header({name}:pageProps) {
         {name: 'Wall', href: '/wall'},
         {name: 'Feedback', href: '/feedback'},
         {name: 'About', href: '/about'},
+        // {name: 'Chatbot', href: '/chatbot'}
     ]
 
     const [darkMode, setDarkMode] = useState(() => {

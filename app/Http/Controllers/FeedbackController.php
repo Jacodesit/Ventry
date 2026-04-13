@@ -11,12 +11,19 @@ class FeedbackController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $feedback = Feedback::latest()->get();
+        $filter = $request->query('filter');
+
+        $feedback = Feedback::when($filter && $filter !== 'All', function ($query) use ($filter) {
+            $query->where('rating', $filter);
+        })
+        ->latest()
+        ->get();
 
         return Inertia::render('feedback/page', [
-            'feedback' => $feedback
+            'feedback' => $feedback,
+            'filter' => $filter ?? 'All'
         ]);
     }
 
@@ -44,7 +51,7 @@ class FeedbackController extends Controller
 
         Feedback::create($validated);
 
-        return redirect('/wall');
+        return redirect()->back();
     }
 
     /**

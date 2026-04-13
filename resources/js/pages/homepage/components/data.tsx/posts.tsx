@@ -40,7 +40,6 @@ export default function Posts({posts, reactions = [], type = 'rant'}: pageProps)
     const [isReacting, setIsReacting] = useState<number | null>(null);
     const [openFeedback, setOpenFeedback] = useState(false);
 
-    // Get current filter from URL or default to 'all'
     const urlParams = new URLSearchParams(window.location.search);
     const currentFilter = (urlParams.get('filter') as 'all' | 'rant' | 'secret') || 'all';
     const [filter, setFilter] = useState<'all' | 'rant' | 'secret'>(currentFilter);
@@ -186,7 +185,9 @@ export default function Posts({posts, reactions = [], type = 'rant'}: pageProps)
                             {/* Reactions Section */}
                             <div className='px-5 py-2 flex items-center'>
                                 <div
-                                    ref={el => postRefs.current[post.id] = el}
+                                    ref={(el) => {
+                                        postRefs.current[post.id] = el;
+                                    }}
                                     onClick={() => setActivePostId(activePostId === post.id ? null : post.id)}
                                     className="inline-block relative w-full"
                                 >

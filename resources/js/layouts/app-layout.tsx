@@ -3,6 +3,7 @@ import AOS from "aos";
 import React from "react"
 import { useEffect } from "react"
 import "aos/dist/aos.css";
+import FloatingChatbot from "@/components/floating-chatbot";
 import Header from "@/components/heading"
 import { Toaster } from "@/components/ui/sonner"
 
@@ -30,6 +31,7 @@ export default function AppLayout({children, name}:pageProps) {
             <div className="py-20 px-5 md:px-15 lg:px-50 dark:bg-[#000000]">
                 {children}
             </div>
+            <FloatingChatbot />
         </main>
     )
 }

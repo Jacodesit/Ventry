@@ -29,7 +29,7 @@ export default function About({name}:pageProps) {
                         {/* Voices From the Community */}
                         What <span className="text-blue-500">Ventry</span> Is All <span className="text-blue-500">About</span>?
                     </h1>
-                    <p className="text-sm md:text-base font-extralight text-gray-500">You can speak freely here, share honestly, and know you’ll be heard without judgment.</p>
+                    <p className="text-sm md:text-base font-extralight text-gray-500">Learn more about what Ventry is and how it can help you express yourself freely.</p>
                 </div>
 
                 <div data-aos="fade-up" data-aos-delay="300" className="flex justify-end">
