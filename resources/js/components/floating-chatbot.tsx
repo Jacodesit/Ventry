@@ -248,7 +248,6 @@ const FloatingChatbot: React.FC = () => {
                 </div>
             )}
 
-            {/* Chat Bubble Button - Only visible when closed */}
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
@@ -260,7 +259,6 @@ const FloatingChatbot: React.FC = () => {
                         <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
                     )}
 
-                    {/* Tooltip */}
                     <div className="absolute bottom-16 right-0 whitespace-nowrap bg-gray-800 text-white text-sm px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                         Need someone to talk to? 😊
                     </div>

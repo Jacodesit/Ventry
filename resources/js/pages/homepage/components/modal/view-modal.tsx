@@ -109,7 +109,7 @@ export default function ViewModal({post, open, onClose, reactions}: pageProps) {
                                 <DialogTitle className="text-xl font-bold flex items-center gap-3">
                                     <span>{currentPost.nickname || 'Anonymous'}'s post</span>
                                     <div className={`flex items-center border border-slate-200 bg-white dark:bg-[#141414] dark:shadow dark:border-none dark:text-muted px-2.5 rounded-full shadow-sm max-w-50`}>
-                                        <span className="mr-1.5 shrink-0 text-sm">
+                                        <span className="mr-1.5 shrink-0 text-sm py-1">
                                             {currentPost.custom_emotion ? '📝' : (currentPost.emotion?.emoji || '🙂')}
                                         </span>
 
